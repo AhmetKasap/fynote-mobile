@@ -3,7 +3,8 @@ class ApiConstants {
   ApiConstants._();
 
   // Base URL - Gerçek API URL'inizi buraya yazın
-  static const String baseUrl = 'http://localhost:6000';
+  static const String baseUrl =
+      'http://t84ss0cgw4w0kk4kwo4ccs4o.185.240.104.160.sslip.io';
 
   // API Endpoints
   static const String apiVersion = '/api/v1';
