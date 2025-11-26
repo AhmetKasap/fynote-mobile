@@ -23,6 +23,17 @@ class ApiConstants {
       '$apiVersion/user-profile/forgot-password';
   static const String resetPassword = '$apiVersion/user-profile/reset-password';
 
+  // Folder Endpoints
+  static const String folders = '$apiVersion/folder';
+  static String folder(String id) => '$apiVersion/folder/$id';
+
+  // Note Endpoints
+  static const String notes = '$apiVersion/note';
+  static String note(String id) => '$apiVersion/note/$id';
+
+  // Icon Endpoints
+  static const String icons = '$apiVersion/icons';
+
   // Timeout
   static const Duration connectTimeout = Duration(seconds: 30);
   static const Duration receiveTimeout = Duration(seconds: 30);

@@ -27,7 +27,6 @@ mixin _$ApiResponseModel<T> {
   bool get success => throw _privateConstructorUsedError;
   String? get message => throw _privateConstructorUsedError;
   T? get data => throw _privateConstructorUsedError;
-  @JsonKey(name: 'error')
   String? get error => throw _privateConstructorUsedError;
 
   /// Serializes this ApiResponseModel to a JSON map.
@@ -48,12 +47,7 @@ abstract class $ApiResponseModelCopyWith<T, $Res> {
     $Res Function(ApiResponseModel<T>) then,
   ) = _$ApiResponseModelCopyWithImpl<T, $Res, ApiResponseModel<T>>;
   @useResult
-  $Res call({
-    bool success,
-    String? message,
-    T? data,
-    @JsonKey(name: 'error') String? error,
-  });
+  $Res call({bool success, String? message, T? data, String? error});
 }
 
 /// @nodoc
@@ -109,12 +103,7 @@ abstract class _$$ApiResponseModelImplCopyWith<T, $Res>
   ) = __$$ApiResponseModelImplCopyWithImpl<T, $Res>;
   @override
   @useResult
-  $Res call({
-    bool success,
-    String? message,
-    T? data,
-    @JsonKey(name: 'error') String? error,
-  });
+  $Res call({bool success, String? message, T? data, String? error});
 }
 
 /// @nodoc
@@ -166,7 +155,7 @@ class _$ApiResponseModelImpl<T> implements _ApiResponseModel<T> {
     required this.success,
     this.message,
     this.data,
-    @JsonKey(name: 'error') this.error,
+    this.error,
   });
 
   factory _$ApiResponseModelImpl.fromJson(
@@ -181,7 +170,6 @@ class _$ApiResponseModelImpl<T> implements _ApiResponseModel<T> {
   @override
   final T? data;
   @override
-  @JsonKey(name: 'error')
   final String? error;
 
   @override
@@ -232,7 +220,7 @@ abstract class _ApiResponseModel<T> implements ApiResponseModel<T> {
     required final bool success,
     final String? message,
     final T? data,
-    @JsonKey(name: 'error') final String? error,
+    final String? error,
   }) = _$ApiResponseModelImpl<T>;
 
   factory _ApiResponseModel.fromJson(
@@ -247,7 +235,6 @@ abstract class _ApiResponseModel<T> implements ApiResponseModel<T> {
   @override
   T? get data;
   @override
-  @JsonKey(name: 'error')
   String? get error;
 
   /// Create a copy of ApiResponseModel

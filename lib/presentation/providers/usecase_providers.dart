@@ -7,6 +7,17 @@ import '../../domain/usecases/user_profile/forgot_password_usecase.dart';
 import '../../domain/usecases/user_profile/get_user_profile_usecase.dart';
 import '../../domain/usecases/user_profile/reset_password_usecase.dart';
 import '../../domain/usecases/user_profile/update_user_profile_usecase.dart';
+import '../../domain/usecases/icon/get_icons_usecase.dart';
+import '../../domain/usecases/folder/get_folders_usecase.dart';
+import '../../domain/usecases/folder/get_folder_usecase.dart';
+import '../../domain/usecases/folder/create_folder_usecase.dart';
+import '../../domain/usecases/folder/update_folder_usecase.dart';
+import '../../domain/usecases/folder/delete_folder_usecase.dart';
+import '../../domain/usecases/note/get_notes_usecase.dart';
+import '../../domain/usecases/note/get_note_usecase.dart';
+import '../../domain/usecases/note/create_note_usecase.dart';
+import '../../domain/usecases/note/update_note_usecase.dart';
+import '../../domain/usecases/note/delete_note_usecase.dart';
 import 'repository_providers.dart';
 
 // ==================== Auth Use Cases ====================
@@ -53,4 +64,65 @@ final forgotPasswordUseCaseProvider = Provider<ForgotPasswordUseCase>((ref) {
 final resetPasswordUseCaseProvider = Provider<ResetPasswordUseCase>((ref) {
   final repository = ref.watch(userProfileRepositoryProvider);
   return ResetPasswordUseCase(repository);
+});
+
+// ==================== Icon Use Cases ====================
+
+final getIconsUseCaseProvider = Provider<GetIconsUseCase>((ref) {
+  final repository = ref.watch(iconRepositoryProvider);
+  return GetIconsUseCase(repository);
+});
+
+// ==================== Folder Use Cases ====================
+
+final getFoldersUseCaseProvider = Provider<GetFoldersUseCase>((ref) {
+  final repository = ref.watch(folderRepositoryProvider);
+  return GetFoldersUseCase(repository);
+});
+
+final getFolderUseCaseProvider = Provider<GetFolderUseCase>((ref) {
+  final repository = ref.watch(folderRepositoryProvider);
+  return GetFolderUseCase(repository);
+});
+
+final createFolderUseCaseProvider = Provider<CreateFolderUseCase>((ref) {
+  final repository = ref.watch(folderRepositoryProvider);
+  return CreateFolderUseCase(repository);
+});
+
+final updateFolderUseCaseProvider = Provider<UpdateFolderUseCase>((ref) {
+  final repository = ref.watch(folderRepositoryProvider);
+  return UpdateFolderUseCase(repository);
+});
+
+final deleteFolderUseCaseProvider = Provider<DeleteFolderUseCase>((ref) {
+  final repository = ref.watch(folderRepositoryProvider);
+  return DeleteFolderUseCase(repository);
+});
+
+// ==================== Note Use Cases ====================
+
+final getNotesUseCaseProvider = Provider<GetNotesUseCase>((ref) {
+  final repository = ref.watch(noteRepositoryProvider);
+  return GetNotesUseCase(repository);
+});
+
+final getNoteUseCaseProvider = Provider<GetNoteUseCase>((ref) {
+  final repository = ref.watch(noteRepositoryProvider);
+  return GetNoteUseCase(repository);
+});
+
+final createNoteUseCaseProvider = Provider<CreateNoteUseCase>((ref) {
+  final repository = ref.watch(noteRepositoryProvider);
+  return CreateNoteUseCase(repository);
+});
+
+final updateNoteUseCaseProvider = Provider<UpdateNoteUseCase>((ref) {
+  final repository = ref.watch(noteRepositoryProvider);
+  return UpdateNoteUseCase(repository);
+});
+
+final deleteNoteUseCaseProvider = Provider<DeleteNoteUseCase>((ref) {
+  final repository = ref.watch(noteRepositoryProvider);
+  return DeleteNoteUseCase(repository);
 });

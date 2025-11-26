@@ -10,6 +10,9 @@ import '../screens/onboarding/onboarding_screen.dart';
 import '../screens/profile/profile_screen.dart';
 import '../screens/profile/edit_profile_screen.dart';
 import '../screens/splash_screen.dart';
+import '../screens/folder/folder_form_screen.dart';
+import '../screens/note/note_form_screen.dart';
+import '../screens/note/note_detail_screen.dart';
 
 class AppRouter {
   static const String splash = '/';
@@ -22,6 +25,11 @@ class AppRouter {
   static const String home = '/home';
   static const String profile = '/profile';
   static const String editProfile = '/edit-profile';
+  static const String createFolder = '/create-folder';
+  static const String editFolder = '/edit-folder';
+  static const String createNote = '/create-note';
+  static const String editNote = '/edit-note';
+  static const String noteDetail = '/note-detail';
 
   static final GoRouter router = GoRouter(
     initialLocation: splash,
@@ -70,6 +78,39 @@ class AppRouter {
       GoRoute(
         path: editProfile,
         builder: (context, state) => const EditProfileScreen(),
+      ),
+
+      // Folder Routes
+      GoRoute(
+        path: createFolder,
+        builder: (context, state) => const FolderFormScreen(),
+      ),
+      GoRoute(
+        path: '$editFolder/:id',
+        builder: (context, state) {
+          final folderId = state.pathParameters['id'];
+          return FolderFormScreen(folderId: folderId);
+        },
+      ),
+
+      // Note Routes
+      GoRoute(
+        path: createNote,
+        builder: (context, state) => const NoteFormScreen(),
+      ),
+      GoRoute(
+        path: '$editNote/:id',
+        builder: (context, state) {
+          final noteId = state.pathParameters['id'];
+          return NoteFormScreen(noteId: noteId);
+        },
+      ),
+      GoRoute(
+        path: '$noteDetail/:id',
+        builder: (context, state) {
+          final noteId = state.pathParameters['id'];
+          return NoteDetailScreen(noteId: noteId!);
+        },
       ),
     ],
 
