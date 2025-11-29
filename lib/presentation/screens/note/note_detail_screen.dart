@@ -4,9 +4,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:dart_quill_delta/dart_quill_delta.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/theme/app_colors.dart';
 import '../../providers/note_provider.dart';
-import '../../router/app_router.dart';
 
 class NoteDetailScreen extends ConsumerStatefulWidget {
   final String noteId;
@@ -155,8 +153,8 @@ class _NoteDetailScreenState extends ConsumerState<NoteDetailScreen> {
                 note.icon!.fileUrl,
                 width: 24,
                 height: 24,
-                colorFilter: const ColorFilter.mode(
-                  AppColors.primary,
+                colorFilter: ColorFilter.mode(
+                  Theme.of(context).colorScheme.primary,
                   BlendMode.srcIn,
                 ),
               ),
@@ -166,16 +164,6 @@ class _NoteDetailScreenState extends ConsumerState<NoteDetailScreen> {
           ],
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: () {
-              context.push('${AppRouter.editNote}/${note.id}').then((value) {
-                if (value == true) {
-                  _loadNote();
-                }
-              });
-            },
-          ),
           IconButton(icon: const Icon(Icons.delete), onPressed: _deleteNote),
         ],
       ),
@@ -196,16 +184,20 @@ class _NoteDetailScreenState extends ConsumerState<NoteDetailScreen> {
             Row(
               children: [
                 if (note.createdAt != null) ...[
-                  const Icon(
+                  Icon(
                     Icons.access_time,
                     size: 16,
-                    color: AppColors.textSecondary,
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withOpacity(0.5),
                   ),
                   const SizedBox(width: 4),
                   Text(
                     _formatDate(note.createdAt!),
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColors.textSecondary,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withOpacity(0.5),
                     ),
                   ),
                 ],

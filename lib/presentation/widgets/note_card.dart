@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../domain/entities/note.dart';
-import '../../core/theme/app_colors.dart';
 
 class NoteCard extends StatelessWidget {
   final NoteEntity note;
   final VoidCallback onTap;
   final VoidCallback? onLongPress;
-  final VoidCallback? onEdit;
   final VoidCallback? onDelete;
 
   const NoteCard({
@@ -15,19 +13,23 @@ class NoteCard extends StatelessWidget {
     required this.note,
     required this.onTap,
     this.onLongPress,
-    this.onEdit,
     this.onDelete,
   });
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(
+          color: Theme.of(context).dividerColor.withOpacity(0.1),
+        ),
+      ),
       child: InkWell(
         onTap: onTap,
         onLongPress: onLongPress,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         child: Container(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -38,19 +40,26 @@ class NoteCard extends StatelessWidget {
                   // Icon (if exists)
                   if (note.icon != null) ...[
                     Container(
-                      width: 32,
-                      height: 32,
+                      width: 36,
+                      height: 36,
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(8),
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.primary.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.primary.withOpacity(0.2),
+                        ),
                       ),
                       child: Center(
                         child: SvgPicture.network(
                           note.icon!.fileUrl,
                           width: 20,
                           height: 20,
-                          colorFilter: const ColorFilter.mode(
-                            AppColors.primary,
+                          colorFilter: ColorFilter.mode(
+                            Theme.of(context).colorScheme.primary,
                             BlendMode.srcIn,
                           ),
                         ),
@@ -69,66 +78,66 @@ class NoteCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  // Actions
-                  if (onEdit != null || onDelete != null)
-                    PopupMenuButton<String>(
-                      icon: const Icon(Icons.more_vert, size: 20),
-                      onSelected: (value) {
-                        if (value == 'edit' && onEdit != null) {
-                          onEdit!();
-                        } else if (value == 'delete' && onDelete != null) {
-                          onDelete!();
-                        }
-                      },
-                      itemBuilder: (context) => [
-                        if (onEdit != null)
-                          const PopupMenuItem(
-                            value: 'edit',
-                            child: Row(
-                              children: [
-                                Icon(Icons.edit, size: 18),
-                                SizedBox(width: 8),
-                                Text('Düzenle'),
-                              ],
-                            ),
+                  // Delete Action
+                  if (onDelete != null)
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: onDelete,
+                        borderRadius: BorderRadius.circular(8),
+                        child: Container(
+                          width: 32,
+                          height: 32,
+                          alignment: Alignment.center,
+                          child: Icon(
+                            Icons.delete_outline,
+                            size: 20,
+                            color: Colors.red.shade400,
                           ),
-                        if (onDelete != null)
-                          const PopupMenuItem(
-                            value: 'delete',
-                            child: Row(
-                              children: [
-                                Icon(Icons.delete, size: 18, color: Colors.red),
-                                SizedBox(width: 8),
-                                Text(
-                                  'Sil',
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              ],
-                            ),
-                          ),
-                      ],
+                        ),
+                      ),
                     ),
                 ],
               ),
-              const SizedBox(height: 8),
-              // Content Preview
-              Text(
-                note.contentText,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppColors.textSecondary,
-                ),
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 8),
-              // Created Date
-              if (note.createdAt != null)
+              if (note.contentText.trim().isNotEmpty) ...[
+                const SizedBox(height: 12),
+                // Content Preview
                 Text(
-                  _formatDate(note.createdAt!),
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppColors.textSecondary,
+                  note.contentText,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withOpacity(0.6),
+                    height: 1.4,
                   ),
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
                 ),
+              ],
+              const SizedBox(height: 12),
+              // Created Date
+              Row(
+                children: [
+                  Icon(
+                    Icons.access_time,
+                    size: 14,
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withOpacity(0.4),
+                  ),
+                  const SizedBox(width: 4),
+                  if (note.createdAt != null)
+                    Text(
+                      _formatDate(note.createdAt!),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withOpacity(0.5),
+                        fontSize: 12,
+                      ),
+                    ),
+                ],
+              ),
             ],
           ),
         ),

@@ -366,17 +366,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                         child: NoteCard(
                           note: note,
                           onTap: () {
-                            context
-                                .push('${AppRouter.noteDetail}/${note.id}')
-                                .then((value) {
-                                  if (value == true) {
-                                    ref
-                                        .read(noteProvider.notifier)
-                                        .getNotes(folderId: _selectedFolderId);
-                                  }
-                                });
-                          },
-                          onEdit: () {
+                            // Direkt düzenleme moduna git
                             context
                                 .push('${AppRouter.editNote}/${note.id}')
                                 .then((value) {
