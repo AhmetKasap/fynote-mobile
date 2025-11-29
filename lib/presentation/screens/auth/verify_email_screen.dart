@@ -114,22 +114,6 @@ class _VerifyEmailScreenState extends ConsumerState<VerifyEmailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Icon
-                Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.1),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.email_outlined,
-                    size: 40,
-                    color: AppColors.primary,
-                  ),
-                ),
-                const SizedBox(height: 24),
-
                 // Header
                 Text(
                   'Email Doğrulama',

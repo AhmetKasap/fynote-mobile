@@ -72,23 +72,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Minimalist Logo
-              Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.white.withOpacity(0.2),
-                    width: 2,
-                  ),
-                ),
-                child: const Icon(
-                  Icons.note_alt_outlined,
-                  size: 50,
-                  color: Colors.white,
-                ),
+              // App Logo
+              Image.asset(
+                'assets/images/fynote-logo.png',
+                width: 160,
+                height: 160,
+                fit: BoxFit.contain,
               ),
               const SizedBox(height: 32),
 

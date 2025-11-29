@@ -93,35 +93,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Logo
-                Center(
-                  child: Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [AppColors.secondary, AppColors.secondaryDark],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.secondary.withOpacity(0.3),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
-                    ),
-                    child: const Icon(
-                      Icons.person_add_outlined,
-                      size: 40,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 32),
-
                 // Header
                 Text(
                   'Hesap Oluştur',
@@ -131,12 +102,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Hemen başlamak için kayıt olun',
+                  'Notlarınızı organize edin, AI ile günlük programlar oluşturun',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: isDark
                         ? AppColors.textSecondaryDark
                         : AppColors.textSecondary,
                   ),
+                  textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 32),
 

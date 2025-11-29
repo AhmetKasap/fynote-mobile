@@ -66,25 +66,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppColors.primary, AppColors.primaryDark],
-                ),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Icon(
-                Icons.note_alt_outlined,
-                size: 20,
-                color: Colors.white,
-              ),
+        titleSpacing: 0,
+        title: Align(
+          alignment: Alignment.centerLeft,
+          child: TextButton(
+            onPressed: () {
+              // Ana sayfaya git (ilk tab'a dön)
+              _tabController.animateTo(0);
+              setState(() {
+                _selectedFolderId = null;
+              });
+              ref.read(folderProvider.notifier).getFolders();
+            },
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
             ),
-            const SizedBox(width: 12),
-            const Text('FyNote'),
-          ],
+            child: Text(
+              'FyNote',
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+            ),
+          ),
         ),
         bottom: TabBar(
           controller: _tabController,
@@ -106,13 +109,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           IconButton(
             icon: CircleAvatar(
               backgroundColor: AppColors.primary.withOpacity(0.1),
-              child: Text(
-                user?.initials ?? '?',
-                style: const TextStyle(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              child: user?.initials != null
+                  ? Text(
+                      user!.initials,
+                      style: const TextStyle(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  : const Icon(Icons.person, color: AppColors.primary),
             ),
             onPressed: () {
               context.push(AppRouter.profile);

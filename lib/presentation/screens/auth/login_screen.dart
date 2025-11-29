@@ -87,35 +87,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               children: [
                 const SizedBox(height: 20),
 
-                // Logo
-                Center(
-                  child: Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [AppColors.primary, AppColors.primaryDark],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.primary.withOpacity(0.3),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
-                    ),
-                    child: const Icon(
-                      Icons.note_alt_outlined,
-                      size: 40,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 32),
-
                 // Header
                 Text(
                   'Hoş Geldiniz! 👋',
@@ -125,12 +96,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Notlarınıza erişmek için giriş yapın',
+                  'FyNote ile notlarınıza erişin, AI ile program oluşturun',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: isDark
                         ? AppColors.textSecondaryDark
                         : AppColors.textSecondary,
                   ),
+                  textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 40),
 
