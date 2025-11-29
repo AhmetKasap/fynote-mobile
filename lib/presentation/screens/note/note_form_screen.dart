@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:dart_quill_delta/dart_quill_delta.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../core/theme/app_colors.dart';
 import '../../../domain/entities/icon.dart';
 import '../../../domain/entities/folder.dart';
 import '../../providers/note_provider.dart';
@@ -131,55 +130,125 @@ class _NoteFormScreenState extends ConsumerState<NoteFormScreen> {
 
     showModalBottomSheet(
       context: context,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(20),
+      builder: (modalContext) => Container(
+        padding: const EdgeInsets.symmetric(vertical: 20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                const Text(
-                  'Klasör Seç',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const Spacer(),
-                IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                children: [
+                  Text(
+                    'Klasör Seç',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    icon: const Icon(Icons.close, size: 20),
+                    onPressed: () => Navigator.pop(modalContext),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                ],
+              ),
             ),
-            const Divider(),
-            const SizedBox(height: 16),
+            const Divider(height: 20),
             // No folder option
-            ListTile(
-              leading: const Icon(Icons.note_outlined),
-              title: const Text('Klasörsüz'),
-              trailing: _selectedFolder == null
-                  ? const Icon(Icons.check, color: AppColors.primary)
-                  : null,
-              onTap: () {
-                setState(() {
-                  _selectedFolder = null;
-                });
-                Navigator.pop(context);
-              },
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    _selectedFolder = null;
+                  });
+                  Navigator.pop(modalContext);
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 14,
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Icon(
+                          Icons.note_outlined,
+                          size: 20,
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withOpacity(0.7),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'Klasörsüz',
+                          style: Theme.of(context).textTheme.bodyLarge
+                              ?.copyWith(fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                      if (_selectedFolder == null)
+                        Icon(
+                          Icons.check_circle,
+                          color: Theme.of(context).colorScheme.primary,
+                          size: 22,
+                        ),
+                    ],
+                  ),
+                ),
+              ),
             ),
-            const Divider(),
+            if (folders.isNotEmpty) ...[
+              Divider(height: 1, color: Theme.of(context).dividerColor),
+              const SizedBox(height: 8),
+            ],
             // Folders list
             if (folders.isEmpty)
-              const Padding(
-                padding: EdgeInsets.all(16),
-                child: Center(child: Text('Henüz klasör yok')),
+              Padding(
+                padding: const EdgeInsets.all(32),
+                child: Center(
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.folder_off_outlined,
+                        size: 48,
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withOpacity(0.3),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        'Henüz klasör yok',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withOpacity(0.5),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               )
             else
               ...folders.map((folder) {
                 final isSelected = _selectedFolder?.id == folder.id;
-                Color folderColor = AppColors.primary;
+                Color folderColor = Theme.of(context).colorScheme.primary;
                 if (folder.color != null) {
                   try {
                     folderColor = Color(
@@ -190,28 +259,65 @@ class _NoteFormScreenState extends ConsumerState<NoteFormScreen> {
                   }
                 }
 
-                return ListTile(
-                  leading: folder.icon != null
-                      ? SvgPicture.network(
-                          folder.icon!.fileUrl,
-                          width: 24,
-                          height: 24,
-                          colorFilter: ColorFilter.mode(
-                            folderColor,
-                            BlendMode.srcIn,
+                return Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _selectedFolder = folder;
+                      });
+                      Navigator.pop(modalContext);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 14,
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 36,
+                            height: 36,
+                            decoration: BoxDecoration(
+                              color: folderColor.withOpacity(0.15),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Center(
+                              child: folder.icon != null
+                                  ? SvgPicture.network(
+                                      folder.icon!.fileUrl,
+                                      width: 20,
+                                      height: 20,
+                                      colorFilter: ColorFilter.mode(
+                                        folderColor,
+                                        BlendMode.srcIn,
+                                      ),
+                                    )
+                                  : Icon(
+                                      Icons.folder,
+                                      color: folderColor,
+                                      size: 20,
+                                    ),
+                            ),
                           ),
-                        )
-                      : Icon(Icons.folder, color: folderColor),
-                  title: Text(folder.name),
-                  trailing: isSelected
-                      ? const Icon(Icons.check, color: AppColors.primary)
-                      : null,
-                  onTap: () {
-                    setState(() {
-                      _selectedFolder = folder;
-                    });
-                    Navigator.pop(context);
-                  },
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              folder.name,
+                              style: Theme.of(context).textTheme.bodyLarge
+                                  ?.copyWith(fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                          if (isSelected)
+                            Icon(
+                              Icons.check_circle,
+                              color: Theme.of(context).colorScheme.primary,
+                              size: 22,
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
                 );
               }),
           ],
@@ -222,6 +328,234 @@ class _NoteFormScreenState extends ConsumerState<NoteFormScreen> {
 
   String _getPlainTextFromDocument() {
     return _quillController.document.toPlainText();
+  }
+
+  Widget _buildToolbarButton({
+    required BuildContext context,
+    required IconData icon,
+    required String tooltip,
+    required VoidCallback onPressed,
+  }) {
+    return Tooltip(
+      message: tooltip,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onPressed,
+          borderRadius: BorderRadius.circular(8),
+          child: Container(
+            width: 36,
+            height: 36,
+            alignment: Alignment.center,
+            child: Icon(
+              icon,
+              size: 19,
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showHeaderPicker() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Container(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                children: [
+                  Text(
+                    'Metin Stili',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    icon: const Icon(Icons.close, size: 20),
+                    onPressed: () => Navigator.pop(context),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                ],
+              ),
+            ),
+            const Divider(height: 20),
+            _buildHeaderOption(
+              context: context,
+              title: 'Normal',
+              style: const TextStyle(fontSize: 16),
+              onTap: () {
+                _quillController.formatSelection(Attribute.header);
+                Navigator.pop(context);
+              },
+            ),
+            _buildHeaderOption(
+              context: context,
+              title: 'Başlık 1',
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              onTap: () {
+                _quillController.formatSelection(Attribute.h1);
+                Navigator.pop(context);
+              },
+            ),
+            _buildHeaderOption(
+              context: context,
+              title: 'Başlık 2',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              onTap: () {
+                _quillController.formatSelection(Attribute.h2);
+                Navigator.pop(context);
+              },
+            ),
+            _buildHeaderOption(
+              context: context,
+              title: 'Başlık 3',
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              onTap: () {
+                _quillController.formatSelection(Attribute.h3);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeaderOption({
+    required BuildContext context,
+    required String title,
+    required TextStyle style,
+    required VoidCallback onTap,
+  }) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              title,
+              style: style.copyWith(
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showColorPicker() {
+    final colors = [
+      {'color': const Color(0xFF000000), 'hex': '#000000', 'name': 'Siyah'},
+      {'color': const Color(0xFFEF4444), 'hex': '#EF4444', 'name': 'Kırmızı'},
+      {'color': const Color(0xFF3B82F6), 'hex': '#3B82F6', 'name': 'Mavi'},
+      {'color': const Color(0xFF10B981), 'hex': '#10B981', 'name': 'Yeşil'},
+      {'color': const Color(0xFFF59E0B), 'hex': '#F59E0B', 'name': 'Turuncu'},
+      {'color': const Color(0xFF8B5CF6), 'hex': '#8B5CF6', 'name': 'Mor'},
+      {'color': const Color(0xFF64748B), 'hex': '#64748B', 'name': 'Gri'},
+      {'color': const Color(0xFFEC4899), 'hex': '#EC4899', 'name': 'Pembe'},
+    ];
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (modalContext) => Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  'Metin Rengi',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Spacer(),
+                IconButton(
+                  icon: const Icon(Icons.close, size: 20),
+                  onPressed: () => Navigator.pop(modalContext),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Wrap(
+              spacing: 16,
+              runSpacing: 16,
+              children: colors.map((colorData) {
+                final color = colorData['color'] as Color;
+                final hex = colorData['hex'] as String;
+                final name = colorData['name'] as String;
+                return InkWell(
+                  onTap: () {
+                    _quillController.formatSelection(
+                      Attribute.fromKeyValue('color', hex),
+                    );
+                    Navigator.pop(modalContext);
+                  },
+                  borderRadius: BorderRadius.circular(12),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: color,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Theme.of(
+                              context,
+                            ).dividerColor.withOpacity(0.2),
+                            width: 2,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: color.withOpacity(0.3),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        name,
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodySmall?.copyWith(fontSize: 11),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
   }
 
   Future<void> _saveNote() async {
@@ -306,108 +640,277 @@ class _NoteFormScreenState extends ConsumerState<NoteFormScreen> {
         key: _formKey,
         child: Column(
           children: [
-            // Top bar with icon and folder
+            // Compact header with icon, title and folder
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 10),
               decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(color: AppColors.border)),
-              ),
-              child: Row(
-                children: [
-                  // Icon Picker
-                  InkWell(
-                    onTap: _pickIcon,
-                    borderRadius: BorderRadius.circular(12),
-                    child: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: AppColors.border),
-                      ),
-                      child: Center(
-                        child: _selectedIcon != null
-                            ? SvgPicture.network(
-                                _selectedIcon!.fileUrl,
-                                width: 24,
-                                height: 24,
-                                colorFilter: const ColorFilter.mode(
-                                  AppColors.primary,
-                                  BlendMode.srcIn,
-                                ),
-                              )
-                            : const Icon(
-                                Icons.add_photo_alternate_outlined,
-                                size: 24,
-                                color: AppColors.primary,
-                              ),
-                      ),
-                    ),
+                color: Theme.of(context).colorScheme.surface,
+                border: Border(
+                  bottom: BorderSide(
+                    color: Theme.of(context).dividerColor.withOpacity(0.1),
                   ),
-                  const SizedBox(width: 12),
-                  // Folder Picker
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: _showFolderPicker,
-                      icon: const Icon(Icons.folder_outlined, size: 20),
-                      label: Text(
-                        _selectedFolder?.name ?? 'Klasör Seç',
-                        overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              child: Column(
+                children: [
+                  // Icon and folder row
+                  Row(
+                    children: [
+                      // Compact Icon Picker
+                      Tooltip(
+                        message: 'Icon seç',
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: _pickIcon,
+                            borderRadius: BorderRadius.circular(10),
+                            child: Container(
+                              width: 36,
+                              height: 36,
+                              decoration: BoxDecoration(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.primary.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.primary.withOpacity(0.2),
+                                  width: 1,
+                                ),
+                              ),
+                              child: Center(
+                                child: _selectedIcon != null
+                                    ? SvgPicture.network(
+                                        _selectedIcon!.fileUrl,
+                                        width: 18,
+                                        height: 18,
+                                        colorFilter: ColorFilter.mode(
+                                          Theme.of(context).colorScheme.primary,
+                                          BlendMode.srcIn,
+                                        ),
+                                      )
+                                    : Icon(
+                                        Icons.tag_rounded,
+                                        size: 18,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.primary,
+                                      ),
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                      style: OutlinedButton.styleFrom(
-                        minimumSize: const Size(0, 50),
+                      const SizedBox(width: 10),
+                      // Compact Folder Picker
+                      Tooltip(
+                        message: 'Klasör seç',
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: _showFolderPicker,
+                            borderRadius: BorderRadius.circular(10),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: _selectedFolder != null
+                                    ? Theme.of(
+                                        context,
+                                      ).colorScheme.primary.withOpacity(0.1)
+                                    : Theme.of(
+                                        context,
+                                      ).colorScheme.onSurface.withOpacity(0.05),
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: _selectedFolder != null
+                                      ? Theme.of(
+                                          context,
+                                        ).colorScheme.primary.withOpacity(0.3)
+                                      : Colors.transparent,
+                                  width: 1,
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.folder_outlined,
+                                    size: 16,
+                                    color: _selectedFolder != null
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Theme.of(context)
+                                              .colorScheme
+                                              .onSurface
+                                              .withOpacity(0.5),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  ConstrainedBox(
+                                    constraints: const BoxConstraints(
+                                      maxWidth: 120,
+                                    ),
+                                    child: Text(
+                                      _selectedFolder?.name ?? 'Klasör',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w500,
+                                        color: _selectedFolder != null
+                                            ? Theme.of(
+                                                context,
+                                              ).colorScheme.primary
+                                            : Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface
+                                                  .withOpacity(0.5),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  // Compact Title
+                  TextFormField(
+                    controller: _titleController,
+                    decoration: InputDecoration(
+                      hintText: 'Başlık ekle...',
+                      hintStyle: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.onSurface.withOpacity(0.4),
+                      ),
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 0,
+                        vertical: 4,
+                      ),
+                      isDense: true,
                     ),
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Başlık gerekli';
+                      }
+                      return null;
+                    },
                   ),
                 ],
               ),
             ),
-            // Title
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: TextFormField(
-                controller: _titleController,
-                decoration: const InputDecoration(
-                  hintText: 'Başlık',
-                  border: InputBorder.none,
+            // Ultra Minimal Toolbar
+            Container(
+              height: 42,
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                border: Border(
+                  bottom: BorderSide(
+                    color: Theme.of(context).dividerColor.withOpacity(0.1),
+                    width: 1,
+                  ),
                 ),
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Başlık gerekli';
-                  }
-                  return null;
-                },
+                boxShadow: [
+                  BoxShadow(
+                    color: Theme.of(context).shadowColor.withOpacity(0.03),
+                    blurRadius: 4,
+                    offset: const Offset(0, 1),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  _buildToolbarButton(
+                    context: context,
+                    icon: Icons.format_bold,
+                    tooltip: 'Kalın',
+                    onPressed: () =>
+                        _quillController.formatSelection(Attribute.bold),
+                  ),
+                  _buildToolbarButton(
+                    context: context,
+                    icon: Icons.format_italic,
+                    tooltip: 'İtalik',
+                    onPressed: () =>
+                        _quillController.formatSelection(Attribute.italic),
+                  ),
+                  _buildToolbarButton(
+                    context: context,
+                    icon: Icons.format_underlined,
+                    tooltip: 'Altı çizili',
+                    onPressed: () =>
+                        _quillController.formatSelection(Attribute.underline),
+                  ),
+                  Container(
+                    width: 1,
+                    height: 20,
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    color: Theme.of(context).dividerColor.withOpacity(0.2),
+                  ),
+                  _buildToolbarButton(
+                    context: context,
+                    icon: Icons.title_outlined,
+                    tooltip: 'Başlık',
+                    onPressed: () => _showHeaderPicker(),
+                  ),
+                  _buildToolbarButton(
+                    context: context,
+                    icon: Icons.format_list_bulleted,
+                    tooltip: 'Liste',
+                    onPressed: () =>
+                        _quillController.formatSelection(Attribute.ul),
+                  ),
+                  _buildToolbarButton(
+                    context: context,
+                    icon: Icons.format_list_numbered,
+                    tooltip: 'Numaralı liste',
+                    onPressed: () =>
+                        _quillController.formatSelection(Attribute.ol),
+                  ),
+                  _buildToolbarButton(
+                    context: context,
+                    icon: Icons.check_box_outlined,
+                    tooltip: 'Yapılacaklar',
+                    onPressed: () =>
+                        _quillController.formatSelection(Attribute.unchecked),
+                  ),
+                  Container(
+                    width: 1,
+                    height: 20,
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    color: Theme.of(context).dividerColor.withOpacity(0.2),
+                  ),
+                  _buildToolbarButton(
+                    context: context,
+                    icon: Icons.palette_outlined,
+                    tooltip: 'Renk',
+                    onPressed: () => _showColorPicker(),
+                  ),
+                ],
               ),
             ),
-            const Divider(height: 1),
-            // Quill Toolbar
-            QuillSimpleToolbar(
-              controller: _quillController,
-              config: const QuillSimpleToolbarConfig(
-                showBoldButton: true,
-                showItalicButton: true,
-                showUnderLineButton: true,
-                showStrikeThrough: true,
-                showListNumbers: true,
-                showListBullets: true,
-                showListCheck: true,
-                showCodeBlock: false,
-                showInlineCode: false,
-                showLink: false,
-                showColorButton: false,
-                showBackgroundColorButton: false,
-                showClearFormat: false,
-                showAlignmentButtons: false,
-                showHeaderStyle: true,
-              ),
-            ),
-            const Divider(height: 1),
             // Quill Editor
-            Expanded(child: QuillEditor.basic(controller: _quillController)),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: QuillEditor.basic(controller: _quillController),
+              ),
+            ),
           ],
         ),
       ),
