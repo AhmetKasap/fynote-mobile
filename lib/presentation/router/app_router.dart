@@ -13,6 +13,8 @@ import '../screens/splash_screen.dart';
 import '../screens/folder/folder_form_screen.dart';
 import '../screens/note/note_form_screen.dart';
 import '../screens/note/note_detail_screen.dart';
+import '../screens/program/create_program_screen.dart';
+import '../screens/program/program_detail_screen.dart';
 
 class AppRouter {
   static const String splash = '/';
@@ -30,6 +32,8 @@ class AppRouter {
   static const String createNote = '/create-note';
   static const String editNote = '/edit-note';
   static const String noteDetail = '/note-detail';
+  static const String createProgram = '/create-program';
+  static const String programDetail = '/program-detail';
 
   static final GoRouter router = GoRouter(
     initialLocation: splash,
@@ -110,6 +114,19 @@ class AppRouter {
         builder: (context, state) {
           final noteId = state.pathParameters['id'];
           return NoteDetailScreen(noteId: noteId!);
+        },
+      ),
+
+      // Program Routes
+      GoRoute(
+        path: createProgram,
+        builder: (context, state) => const CreateProgramScreen(),
+      ),
+      GoRoute(
+        path: '$programDetail/:id',
+        builder: (context, state) {
+          final programId = state.pathParameters['id'];
+          return ProgramDetailScreen(programId: programId!);
         },
       ),
     ],

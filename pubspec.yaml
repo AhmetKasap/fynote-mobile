@@ -58,6 +58,19 @@ dependencies:
   # Utilities
   equatable: ^2.0.5
   dartz: ^0.10.1
+  intl: ^0.20.2
+  
+  # Audio Recording & Permissions
+  record: ^6.1.2
+  path_provider: ^2.1.3
+  permission_handler: ^11.3.1
+  
+  # HTTP Parser (for multipart)
+  http_parser: ^4.0.2
+  
+  # Localization
+  flutter_localizations:
+    sdk: flutter
   
   # Icons
   cupertino_icons: ^1.0.8

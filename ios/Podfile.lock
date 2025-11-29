@@ -6,7 +6,11 @@ PODS:
     - Flutter
   - objective_c (0.0.1):
     - Flutter
+  - permission_handler_apple (9.3.0):
+    - Flutter
   - quill_native_bridge_ios (0.0.1):
+    - Flutter
+  - record_ios (1.1.0):
     - Flutter
   - shared_preferences_foundation (0.0.1):
     - Flutter
@@ -19,7 +23,9 @@ DEPENDENCIES:
   - flutter_keyboard_visibility_temp_fork (from `.symlinks/plugins/flutter_keyboard_visibility_temp_fork/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - objective_c (from `.symlinks/plugins/objective_c/ios`)
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - quill_native_bridge_ios (from `.symlinks/plugins/quill_native_bridge_ios/ios`)
+  - record_ios (from `.symlinks/plugins/record_ios/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
@@ -32,8 +38,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
   objective_c:
     :path: ".symlinks/plugins/objective_c/ios"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
   quill_native_bridge_ios:
     :path: ".symlinks/plugins/quill_native_bridge_ios/ios"
+  record_ios:
+    :path: ".symlinks/plugins/record_ios/ios"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
   url_launcher_ios:
@@ -44,7 +54,9 @@ SPEC CHECKSUMS:
   flutter_keyboard_visibility_temp_fork: 95b2d534bacf6ac62e7fcbe5c2a9e2c2a17ce06f
   flutter_secure_storage: 1ed9476fba7e7a782b22888f956cce43e2c62f13
   objective_c: 89e720c30d716b036faf9c9684022048eee1eee2
+  permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
   quill_native_bridge_ios: f47af4b14e7757968486641656c5d23250cee521
+  record_ios: f75fa1d57f840012775c0e93a38a7f3ceea1a374
   shared_preferences_foundation: 7036424c3d8ec98dfe75ff1667cb0cd531ec82bb
   url_launcher_ios: 7a95fa5b60cc718a708b8f2966718e93db0cef1b
 

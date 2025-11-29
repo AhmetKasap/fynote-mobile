@@ -34,6 +34,12 @@ class ApiConstants {
   // Icon Endpoints
   static const String icons = '$apiVersion/icons';
 
+  // Program Endpoints
+  static const String programs = '$apiVersion/program';
+  static String program(String id) => '$apiVersion/program/$id';
+  static const String programFromText = '$apiVersion/program/from-text';
+  static const String programFromAudio = '$apiVersion/program/from-audio';
+
   // Timeout
   static const Duration connectTimeout = Duration(seconds: 30);
   static const Duration receiveTimeout = Duration(seconds: 30);

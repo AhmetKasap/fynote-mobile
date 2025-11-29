@@ -6,9 +6,11 @@ import '../../providers/auth_provider.dart';
 import '../../providers/theme_provider.dart';
 import '../../providers/folder_provider.dart';
 import '../../providers/note_provider.dart';
+import '../../providers/program_provider.dart';
 import '../../router/app_router.dart';
 import '../../widgets/folder_card.dart';
 import '../../widgets/note_card.dart';
+import '../../widgets/program/program_card.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -25,7 +27,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
 
     // Listen to tab changes to update FAB label
     _tabController.addListener(() {
@@ -38,6 +40,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     Future.microtask(() {
       ref.read(folderProvider.notifier).getFolders();
       ref.read(noteProvider.notifier).getNotes();
+      ref.read(programProvider.notifier).getPrograms();
     });
   }
 
@@ -59,6 +62,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
     final folderState = ref.watch(folderProvider);
     final noteState = ref.watch(noteProvider);
+    final programState = ref.watch(programProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -87,6 +91,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           tabs: const [
             Tab(text: 'Klasörler', icon: Icon(Icons.folder_outlined)),
             Tab(text: 'Notlar', icon: Icon(Icons.note_outlined)),
+            Tab(text: 'Programlar', icon: Icon(Icons.calendar_today_outlined)),
           ],
         ),
         actions: [
@@ -123,6 +128,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           _buildFoldersTab(folderState),
           // Notes Tab
           _buildNotesTab(noteState),
+          // Programs Tab
+          _buildProgramsTab(programState),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -134,17 +141,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 ref.read(folderProvider.notifier).getFolders();
               }
             });
-          } else {
+          } else if (_tabController.index == 1) {
             // Create Note
             context.push(AppRouter.createNote).then((value) {
               if (value == true) {
                 ref.read(noteProvider.notifier).getNotes();
               }
             });
+          } else {
+            // Create Program
+            context.push(AppRouter.createProgram).then((value) {
+              if (value == true) {
+                ref.read(programProvider.notifier).getPrograms();
+              }
+            });
           }
         },
         icon: const Icon(Icons.add),
-        label: Text(_tabController.index == 0 ? 'Yeni Klasör' : 'Yeni Not'),
+        label: Text(
+          _tabController.index == 0
+              ? 'Yeni Klasör'
+              : _tabController.index == 1
+              ? 'Yeni Not'
+              : 'Yeni Program',
+        ),
       ),
     );
   }
@@ -433,6 +453,90 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             child: const Text('Sil', style: TextStyle(color: Colors.red)),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildProgramsTab(ProgramState state) {
+    if (state.isLoading && state.programs.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state.error != null && state.programs.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error_outline, size: 64, color: Colors.red),
+            const SizedBox(height: 16),
+            Text(state.error!),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () => ref.read(programProvider.notifier).getPrograms(),
+              child: const Text('Tekrar Dene'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (state.programs.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(32),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.calendar_today_outlined,
+                size: 64,
+                color: AppColors.primary,
+              ),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              'Henüz program yok',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Ses veya metin ile yapay zeka destekli\ngünlük programınızı oluşturun',
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      );
+    }
+
+    return RefreshIndicator(
+      onRefresh: () async {
+        await ref.read(programProvider.notifier).getPrograms();
+      },
+      child: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: state.programs.length,
+        itemBuilder: (context, index) {
+          final program = state.programs[index];
+          return ProgramCard(
+            program: program,
+            onTap: () {
+              context.push('${AppRouter.programDetail}/${program.id}').then((
+                value,
+              ) {
+                if (value == true) {
+                  ref.read(programProvider.notifier).getPrograms();
+                }
+              });
+            },
+          );
+        },
       ),
     );
   }

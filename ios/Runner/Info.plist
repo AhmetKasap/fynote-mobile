@@ -45,5 +45,7 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Ses kaydı ile program oluşturabilmeniz için mikrofon erişimi gerekiyor.</string>
 </dict>
 </plist>

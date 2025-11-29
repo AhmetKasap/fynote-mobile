@@ -4,16 +4,19 @@ import '../../data/datasources/user_profile_remote_data_source.dart';
 import '../../data/datasources/icon_remote_data_source.dart';
 import '../../data/datasources/folder_remote_data_source.dart';
 import '../../data/datasources/note_remote_data_source.dart';
+import '../../data/datasources/program_remote_data_source.dart';
 import '../../data/repositories/auth_repository_impl.dart';
 import '../../data/repositories/user_profile_repository_impl.dart';
 import '../../data/repositories/icon_repository_impl.dart';
 import '../../data/repositories/folder_repository_impl.dart';
 import '../../data/repositories/note_repository_impl.dart';
+import '../../data/repositories/program_repository_impl.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../domain/repositories/user_profile_repository.dart';
 import '../../domain/repositories/icon_repository.dart';
 import '../../domain/repositories/folder_repository.dart';
 import '../../domain/repositories/note_repository.dart';
+import '../../domain/repositories/program_repository.dart';
 import 'core_providers.dart';
 
 /// Auth Remote Data Source Provider
@@ -45,6 +48,14 @@ final folderRemoteDataSourceProvider = Provider<FolderRemoteDataSource>((ref) {
 final noteRemoteDataSourceProvider = Provider<NoteRemoteDataSource>((ref) {
   final dio = ref.watch(dioProvider);
   return NoteRemoteDataSourceImpl(dio);
+});
+
+/// Program Remote Data Source Provider
+final programRemoteDataSourceProvider = Provider<ProgramRemoteDataSource>((
+  ref,
+) {
+  final dio = ref.watch(dioProvider);
+  return ProgramRemoteDataSourceImpl(dio);
 });
 
 /// Auth Repository Provider
@@ -79,4 +90,10 @@ final folderRepositoryProvider = Provider<FolderRepository>((ref) {
 final noteRepositoryProvider = Provider<NoteRepository>((ref) {
   final remoteDataSource = ref.watch(noteRemoteDataSourceProvider);
   return NoteRepositoryImpl(remoteDataSource: remoteDataSource);
+});
+
+/// Program Repository Provider
+final programRepositoryProvider = Provider<ProgramRepository>((ref) {
+  final remoteDataSource = ref.watch(programRemoteDataSourceProvider);
+  return ProgramRepositoryImpl(remoteDataSource);
 });

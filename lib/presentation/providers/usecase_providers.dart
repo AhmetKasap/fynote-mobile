@@ -18,6 +18,11 @@ import '../../domain/usecases/note/get_note_usecase.dart';
 import '../../domain/usecases/note/create_note_usecase.dart';
 import '../../domain/usecases/note/update_note_usecase.dart';
 import '../../domain/usecases/note/delete_note_usecase.dart';
+import '../../domain/usecases/program/get_programs.dart';
+import '../../domain/usecases/program/get_program_by_id.dart';
+import '../../domain/usecases/program/create_program_from_text.dart';
+import '../../domain/usecases/program/create_program_from_audio.dart';
+import '../../domain/usecases/program/delete_program.dart';
 import 'repository_providers.dart';
 
 // ==================== Auth Use Cases ====================
@@ -125,4 +130,35 @@ final updateNoteUseCaseProvider = Provider<UpdateNoteUseCase>((ref) {
 final deleteNoteUseCaseProvider = Provider<DeleteNoteUseCase>((ref) {
   final repository = ref.watch(noteRepositoryProvider);
   return DeleteNoteUseCase(repository);
+});
+
+// ==================== Program Use Cases ====================
+
+final getProgramsUseCaseProvider = Provider<GetPrograms>((ref) {
+  final repository = ref.watch(programRepositoryProvider);
+  return GetPrograms(repository);
+});
+
+final getProgramByIdUseCaseProvider = Provider<GetProgramById>((ref) {
+  final repository = ref.watch(programRepositoryProvider);
+  return GetProgramById(repository);
+});
+
+final createProgramFromTextUseCaseProvider = Provider<CreateProgramFromText>((
+  ref,
+) {
+  final repository = ref.watch(programRepositoryProvider);
+  return CreateProgramFromText(repository);
+});
+
+final createProgramFromAudioUseCaseProvider = Provider<CreateProgramFromAudio>((
+  ref,
+) {
+  final repository = ref.watch(programRepositoryProvider);
+  return CreateProgramFromAudio(repository);
+});
+
+final deleteProgramUseCaseProvider = Provider<DeleteProgram>((ref) {
+  final repository = ref.watch(programRepositoryProvider);
+  return DeleteProgram(repository);
 });

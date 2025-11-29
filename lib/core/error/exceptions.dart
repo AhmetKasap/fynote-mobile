@@ -28,8 +28,10 @@ class CacheException extends AppException {
 
 /// Validation exception
 class ValidationException extends AppException {
-  ValidationException([String message = 'Girilen bilgiler geçersiz'])
-    : super(message);
+  ValidationException([
+    String message = 'Girilen bilgiler geçersiz',
+    int? statusCode,
+  ]) : super(message, statusCode);
 }
 
 /// Authentication exception
