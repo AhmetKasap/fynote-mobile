@@ -94,7 +94,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           tabs: const [
             Tab(text: 'Klasörler', icon: Icon(Icons.folder_outlined)),
             Tab(text: 'Notlar', icon: Icon(Icons.note_outlined)),
-            Tab(text: 'Programlar', icon: Icon(Icons.calendar_today_outlined)),
+            Tab(
+              text: 'AI Programları',
+              icon: Icon(Icons.auto_awesome_outlined),
+            ),
           ],
         ),
         actions: [
@@ -168,7 +171,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               ? 'Yeni Klasör'
               : _tabController.index == 1
               ? 'Yeni Not'
-              : 'Yeni Program',
+              : 'AI ile Program Oluştur',
         ),
       ),
     );
@@ -452,6 +455,64 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     );
   }
 
+  Widget _buildFeatureItem(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required String description,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Theme.of(context).dividerColor.withOpacity(0.1),
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              icon,
+              color: Theme.of(context).colorScheme.primary,
+              size: 24,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  description,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withOpacity(0.6),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildProgramsTab(ProgramState state) {
     if (state.isLoading && state.programs.isEmpty) {
       return const Center(child: CircularProgressIndicator());
@@ -477,35 +538,84 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
     if (state.programs.isEmpty) {
       return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(32),
-              decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
-                shape: BoxShape.circle,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // AI Icon with Gradient
+              Container(
+                width: 120,
+                height: 120,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Theme.of(context).colorScheme.primary,
+                      Theme.of(context).colorScheme.secondary,
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.primary.withOpacity(0.3),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.auto_awesome,
+                  size: 60,
+                  color: Colors.white,
+                ),
               ),
-              child: const Icon(
-                Icons.calendar_today_outlined,
-                size: 64,
-                color: AppColors.primary,
+              const SizedBox(height: 32),
+              Text(
+                '✨ AI Programlarınızı Oluşturun',
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
               ),
-            ),
-            const SizedBox(height: 24),
-            Text(
-              'Henüz program yok',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Ses veya metin ile yapay zeka destekli\ngünlük programınızı oluşturun',
-              style: Theme.of(
+              const SizedBox(height: 16),
+              Text(
+                'Yapay zeka ile günlük programınızı otomatik oluşturun',
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withOpacity(0.7),
+                  fontWeight: FontWeight.w500,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 32),
+              // Features
+              _buildFeatureItem(
                 context,
-              ).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
-              textAlign: TextAlign.center,
-            ),
-          ],
+                icon: Icons.mic,
+                title: 'Sesli Komut',
+                description: 'Sesli anlatın, AI anlasın',
+              ),
+              const SizedBox(height: 16),
+              _buildFeatureItem(
+                context,
+                icon: Icons.keyboard,
+                title: 'Metin ile',
+                description: 'Yazarak programınızı oluşturun',
+              ),
+              const SizedBox(height: 16),
+              _buildFeatureItem(
+                context,
+                icon: Icons.schedule,
+                title: 'Otomatik Planlama',
+                description: 'Akıllı zaman yönetimi',
+              ),
+            ],
+          ),
         ),
       );
     }

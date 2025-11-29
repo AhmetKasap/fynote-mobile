@@ -225,7 +225,7 @@ class _CreateProgramScreenState extends ConsumerState<CreateProgramScreen>
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Yeni Program Oluştur'),
+        title: const Text('AI ile Program Oluştur'),
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
