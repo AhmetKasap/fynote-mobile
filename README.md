@@ -1,16 +1,13 @@
-# fynote_mobile
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img width="1290" height="2796" alt="Image" src="https://github.com/user-attachments/assets/3e366dc8-d526-470e-b953-6af9aaac9952" />
+<img width="446" height="901" alt="Image" src="https://github.com/user-attachments/assets/d1bc8d64-1f75-45aa-bead-f3086ca236da" />
+<img width="465" height="895" alt="Image" src="https://github.com/user-attachments/assets/aa76e866-cd8e-40c8-a64b-00b791c66f13" />
+<img width="453" height="882" alt="Image" src="https://github.com/user-attachments/assets/5ae9f019-24a3-4a99-9ca2-88216b7c38d6" />
+<img width="451" height="912" alt="Image" src="https://github.com/user-attachments/assets/8bde26cb-ea07-410d-a9ed-6ff99797e115" />
+<img width="486" height="901" alt="Image" src="https://github.com/user-attachments/assets/d6c66b89-f4aa-428f-a2f7-b922069295a9" />
+<img width="449" height="895" alt="Image" src="https://github.com/user-attachments/assets/268a6ccf-34aa-4e88-85c7-cf8c5fe4ad12" />
+<img width="432" height="897" alt="Image" src="https://github.com/user-attachments/assets/0b26026d-9d3b-4de0-ad56-3517cb6bb489" />
+<img width="1290" height="2796" alt="Image" src="https://github.com/user-attachments/assets/86ebf989-d4b6-40c9-804e-3123fc6d96ff" />
+<img width="453" height="890" alt="Image" src="https://github.com/user-attachments/assets/072c0ea9-627c-4368-b00a-1c9c616b9a53" />
+<img width="1290" height="2796" alt="Image" src="https://github.com/user-attachments/assets/dea0b3a5-b35a-4f45-82e3-85aa1863ef6b" />
+<img width="448" height="889" alt="Image" src="https://github.com/user-attachments/assets/8e7a1241-a4ec-4b41-9d58-b0840393fb2d" />
+<img width="1290" height="2796" alt="Image" src="https://github.com/user-attachments/assets/1e30a5f2-680b-4252-b30e-f267a9d5028e" />
